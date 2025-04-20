@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: RepSetGoApi
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/repsetgo
+    username: root
+    password: DEEPAK@b1304
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 9090
+
