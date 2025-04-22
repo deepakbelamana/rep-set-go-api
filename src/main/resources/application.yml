@@ -15,3 +15,6 @@ spring:
 server:
   port: 9090
 
+token:
+  secret_key: D7jXQdlIhxL57wV2ihGSjgICnjN44Vhe
+  expiration_milli_seconds: 3600000

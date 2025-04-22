@@ -4,10 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.semicolon.RepSetGoApi.Services.userServices.UserService;
 import com.semicolon.RepSetGoApi.users.LoginUserRequestDo;
 import com.semicolon.RepSetGoApi.users.UserDTO;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,10 +30,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
     private UserService userService;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
+
+    private Environment environment;
+
+
+    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService,Environment environment) {
         super(authenticationManager);
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.environment=environment;
     }
 
     @Override
@@ -49,10 +58,26 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
         //the auth gives the user details
-        String userName = ((User)auth.getPrincipal()).getUsername();
+        String userName = ((User) auth.getPrincipal()).getUsername();
         UserDTO userDto = userService.getUserDetailsByEmail(userName);
+        //jwt token generation
+        String token = environment.getProperty("token.secret_key");
+        byte[] token_bytes = Base64.getEncoder().encode(token.getBytes());
+        SecretKey secretKey = Keys.hmacShaKeyFor(token_bytes);
 
-        //add JWT token logic in future
-        res.addHeader("userId",userDto.getUserId());
+        Instant now = Instant.now();
+
+        //generating token
+        String jwtToken = Jwts.builder()
+                .subject(userDto.getUserId())
+                .expiration(Date.from(now.
+                        plusMillis(Long.parseLong(environment.
+                                getProperty("token.expiration_milli_seconds")))))
+                .issuedAt(Date.from(now))
+                .signWith(secretKey)
+                .compact();
+
+        res.addHeader("userId", userDto.getUserId());
+        res.addHeader("token",jwtToken);
     }
 }

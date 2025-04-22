@@ -5,6 +5,7 @@ import com.semicolon.RepSetGoApi.Services.userServices.implementations.UserServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -21,25 +24,48 @@ public class WebSecurity {
     UserService userService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private Environment environment;
+    public WebSecurity(Environment environment){
+        this.environment=environment;
+    }
 
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
-        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager,userService);
-        authenticationFilter.setFilterProcessesUrl("/rep-set-go/users/login");
+        return authenticationManagerBuilder.build();
+    }
 
-        http.csrf().disable()
-                .cors().and()
-                .authorizeHttpRequests()
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity http, AuthorizationFilter authorizationFilter) throws Exception {
+        // Configure AuthenticationManager
+        AuthenticationManager authenticationManager = authenticationManager(http);
+        
+        // Create and configure AuthenticationFilter
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, userService, environment);
+        authenticationFilter.setFilterProcessesUrl("/rep-set-go/users/login");
+        
+        // Configure HTTP Security
+        http
+            .csrf().disable()
+            .cors().and()
+            .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/rep-set-go/users").permitAll()
-                .and()
-                .addFilter(authenticationFilter)
-                .authenticationManager(authenticationManager)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .requestMatchers("/rep-set-go/users/login").permitAll()
+                .requestMatchers("/rep-set-go/**").authenticated()
+                .anyRequest().authenticated()
+            )
+            .addFilter(authenticationFilter)
+            .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
+            .authenticationManager(authenticationManager)
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         return http.build();
+    }
+
+    @Bean
+    public AuthorizationFilter authorizationFilter(Environment env) {
+        return new AuthorizationFilter(env);
     }
 }
