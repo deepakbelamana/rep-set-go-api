@@ -1,8 +1,8 @@
-package com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOurGroup.Impl;
+package com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOutGroup.Impl;
 
 import com.semicolon.RepSetGoApi.Repositories.UserRepository;
 import com.semicolon.RepSetGoApi.Repositories.WorkOutGroupRepository;
-import com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOurGroup.WorkOutGroupService;
+import com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOutGroup.WorkOutGroupService;
 import com.semicolon.RepSetGoApi.workout.models.WorkOutGroupDTO;
 import com.semicolon.RepSetGoApi.workout.models.WorkOutGroupEntity;
 import com.semicolon.RepSetGoApi.users.UserEntity;
@@ -66,5 +66,10 @@ public class WorkOutGroupServiceImpl implements WorkOutGroupService {
         workOutGroupDTO.setUser_id(workOutGroupEntity.getUserEntity().getUserId());
         workOutGroupDTO.setGroup_id(workOutGroupEntity.getGroup_id());
         return workOutGroupDTO;
+    }
+
+    public WorkOutGroupEntity getWorkOutGroupByGroupId(Long group_id){
+        Optional<WorkOutGroupEntity> workOutGroupEntity = workOutGroupRepository.findById(group_id);
+        return workOutGroupEntity.get();
     }
 }

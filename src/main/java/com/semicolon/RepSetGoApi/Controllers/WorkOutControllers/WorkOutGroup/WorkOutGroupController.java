@@ -1,6 +1,6 @@
 package com.semicolon.RepSetGoApi.Controllers.WorkOutControllers.WorkOutGroup;
 
-import com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOurGroup.WorkOutGroupService;
+import com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOutGroup.WorkOutGroupService;
 import com.semicolon.RepSetGoApi.workout.models.CreateWorkOutGroupDTO;
 import com.semicolon.RepSetGoApi.workout.models.WorkOutGroupDTO;
 import org.modelmapper.ModelMapper;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
