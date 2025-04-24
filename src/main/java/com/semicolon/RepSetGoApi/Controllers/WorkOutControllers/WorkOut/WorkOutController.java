@@ -3,6 +3,7 @@ package com.semicolon.RepSetGoApi.Controllers.WorkOutControllers.WorkOut;
 import com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOut.WorkOutService;
 import com.semicolon.RepSetGoApi.workout.models.CreateWorkOutRequestDo;
 import com.semicolon.RepSetGoApi.workout.models.DeleteWorkOutRequestDo;
+import com.semicolon.RepSetGoApi.workout.models.UpdateWorkOutRequestDo;
 import com.semicolon.RepSetGoApi.workout.models.WorkOutDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -43,4 +44,11 @@ public class WorkOutController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping()
+    public ResponseEntity<WorkOutDTO> updateWorkOut(@RequestBody UpdateWorkOutRequestDo updateWorkOutRequestDo) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        WorkOutDTO workOutDTO = modelMapper.map(updateWorkOutRequestDo,WorkOutDTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body( workOutService.updateWorkOut(workOutDTO));
+    }
 }

@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/repsetgo
     username: root
-    password: DEEPAK@b1304
+    password: ${DB_PWD}
   jpa:
     show-sql: true
     properties:

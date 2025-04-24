@@ -45,6 +45,13 @@ public class WorkOutServiceImpl implements WorkOutService {
         return workOutDTO;
     }
 
+    @Override
+    public WorkOutDTO updateWorkOut(WorkOutDTO workOutDTO) {
+        WorkOutEntity workOutEntity = mapToWorkOutEntity(workOutDTO);
+        WorkOutEntity updatedWorkOutEntity = workOutRepository.save(workOutEntity);
+        return mapToWorkOutDTO(updatedWorkOutEntity);
+    }
+
     private WorkOutDTO mapToWorkOutDTO(WorkOutEntity createdWorkOutEntity) {
         WorkOutDTO workOutDTO = new WorkOutDTO();
         workOutDTO.setWorkout_id(createdWorkOutEntity.getWorkout_id());
