@@ -3,8 +3,8 @@ spring:
     name: RepSetGoApi
 
   datasource:
-    url: jdbc:mysql://localhost:3306/repsetgo
-    username: root
+    url: jdbc:mysql://sql205.infinityfree.com:3306/if0_38823153_repsetgo
+    username: if0_38823153
     password: ${DB_PWD}
   jpa:
     show-sql: true
