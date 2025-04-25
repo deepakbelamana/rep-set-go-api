@@ -14,7 +14,8 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // Allow cookies/auth
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // your frontend origin
+        config.setAllowedOrigins(List.of("http://localhost:5173",
+                                "https://repsetgo.netlify.app")); // your frontend origin
         config.setAllowedHeaders(List.of("*")); // allow all headers
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // allowed methods
         config.setExposedHeaders(List.of("userId","token"));
