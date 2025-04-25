@@ -11,7 +11,8 @@ import java.util.List;
 @Repository
 public interface WorkOutGroupRepository extends JpaRepository<WorkOutGroupEntity, Long> {
 
-    @Query(value = "SELECT * FROM WORKOUT_GROUP wg " +
+    @Query(value = "SELECT wg.group_id,wg.user_id,wg.group_name,wg.created_date" +
+            " FROM WORKOUT_GROUP wg " +
             "JOIN USERS u ON wg.user_id = u.user_id " +
             "WHERE u.user_id = :userId",
             nativeQuery = true)
