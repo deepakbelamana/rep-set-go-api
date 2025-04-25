@@ -52,6 +52,7 @@ public class WebSecurity {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/rep-set-go/users").permitAll()
                 .requestMatchers("/rep-set-go/users/login").permitAll()
+                .requestMatchers("/rep-set-go/staus").permitAll()
                 .requestMatchers("/rep-set-go/**").authenticated()
                 .anyRequest().authenticated()
             )
