@@ -1,5 +1,6 @@
 package com.semicolon.RepSetGoApi.Controllers.ServerStatus;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerStatusController {
 
     @GetMapping()
-    public String checkStatus() {
-        return "server is up and running..!";
+    public ResponseEntity checkStatus() {
+        return ResponseEntity.ok().body("server is up and running..!");
     }
 }
