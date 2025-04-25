@@ -93,6 +93,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (path.endsWith("/rep-set-go/users/login")) {
             return true;
         }
+        //check server staus
+        if (path.endsWith("/rep-set-go/status")) {
+            return true;
+        }
         return false;
     }
 
