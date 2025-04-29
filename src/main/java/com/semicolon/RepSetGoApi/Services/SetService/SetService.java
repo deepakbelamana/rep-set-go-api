@@ -13,4 +13,6 @@ public interface SetService {
     List<SetDto> getSetListForWorkOutId(Long workout_id);
 
     Map<LocalDate,Double> calculateVolume(Long workoutId);
+
+    Double calculateOneRepMax(Long workoutId);
 }

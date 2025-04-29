@@ -76,4 +76,19 @@ public class SetServiceImpl implements SetService{
         }
         return calculatedVolume;
     }
+
+    @Override
+    public Double calculateOneRepMax(Long workout_id) {
+        Double oneRm=0.0;
+        List<SetDto> setDtoList = getSetListForWorkOutId(workout_id);
+        for(SetDto setDto : setDtoList){
+            double rep=setDto.getRep_count();
+            rep=rep/30;
+            rep+=1;
+            if(rep*setDto.getWeight()>oneRm){
+                oneRm=rep*setDto.getWeight();
+            }
+        }
+        return oneRm;
+    }
 }

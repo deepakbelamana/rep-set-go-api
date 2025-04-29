@@ -40,4 +40,9 @@ public class setController {
         return ResponseEntity.ok().body(setService.calculateVolume(workout_id));
     }
 
+    @GetMapping("/progress/oneRm/{workout_id}")
+    public ResponseEntity<Double> calculateOneRepMax(@PathVariable Long workout_id) {
+        return ResponseEntity.ok().body(setService.calculateOneRepMax(workout_id));
+    }
+
 }
