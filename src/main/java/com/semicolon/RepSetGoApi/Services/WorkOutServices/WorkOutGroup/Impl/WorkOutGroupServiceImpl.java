@@ -72,4 +72,28 @@ public class WorkOutGroupServiceImpl implements WorkOutGroupService {
         Optional<WorkOutGroupEntity> workOutGroupEntity = workOutGroupRepository.findById(group_id);
         return workOutGroupEntity.get();
     }
+
+    @Override
+    public WorkOutGroupDTO deleteWorkOutGroup(WorkOutGroupDTO workOutGroupDTO) {
+        WorkOutGroupEntity workOutGroupEntity = mapDtoEntity(workOutGroupDTO);
+        workOutGroupRepository.delete(workOutGroupEntity);
+        return workOutGroupDTO;
+    }
+
+    private WorkOutGroupEntity mapDtoEntity(WorkOutGroupDTO workOutGroupDTO) {
+        WorkOutGroupEntity workOutGroupEntity = new WorkOutGroupEntity();
+        workOutGroupEntity.setGroup_id(workOutGroupDTO.getGroup_id());
+        workOutGroupEntity.setGroupName(workOutGroupDTO.getGroup_name());
+        UserEntity userEntity = userRepository.findByEmail(workOutGroupDTO.getUser_id());
+        workOutGroupEntity.setUserEntity(userEntity);
+        workOutGroupEntity.setCreatedDate(workOutGroupDTO.getCreated_date());
+        return workOutGroupEntity;
+    }
+
+    @Override
+    public WorkOutGroupDTO updateWorkOutGroup(WorkOutGroupDTO workOutGroupDTO) {
+        WorkOutGroupEntity workOutGroupEntity = mapDtoEntity(workOutGroupDTO);
+        WorkOutGroupEntity updatedWorkOutGroupEntity = workOutGroupRepository.save(workOutGroupEntity);
+        return mapEntityToDTO(updatedWorkOutGroupEntity);
+    }
 }

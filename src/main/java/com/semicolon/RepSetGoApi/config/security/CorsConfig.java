@@ -15,10 +15,11 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // Allow cookies/auth
         config.setAllowedOrigins(List.of("http://localhost:5173",
-                                "https://repsetgo.netlify.app")); // your frontend origin
+                "https://repsetgo.netlify.app",
+                "http://localhost:8081")); // your frontend origin
         config.setAllowedHeaders(List.of("*")); // allow all headers
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // allowed methods
-        config.setExposedHeaders(List.of("userId","token"));
+        config.setExposedHeaders(List.of("userId", "token"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config); // apply to all routes
 

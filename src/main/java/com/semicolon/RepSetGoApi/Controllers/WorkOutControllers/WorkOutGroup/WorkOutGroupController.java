@@ -1,8 +1,7 @@
 package com.semicolon.RepSetGoApi.Controllers.WorkOutControllers.WorkOutGroup;
 
 import com.semicolon.RepSetGoApi.Services.WorkOutServices.WorkOutGroup.WorkOutGroupService;
-import com.semicolon.RepSetGoApi.workout.models.CreateWorkOutGroupDTO;
-import com.semicolon.RepSetGoApi.workout.models.WorkOutGroupDTO;
+import com.semicolon.RepSetGoApi.workout.models.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,23 @@ public class WorkOutGroupController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<WorkOutGroupDTO>> getWorkOutGroupByUserId(@PathVariable String userId) {
         return ResponseEntity.status(HttpStatus.OK).body(workOutGroupService.getWorkOutGroupByUserId(userId));
+    }
+
+    @DeleteMapping()
+    public ResponseEntity deleteWorkOutGroup(@RequestBody DeleteWorkOutGroupRequestDo deleteWorkOutGroupRequestDo){
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        WorkOutGroupDTO workOutGroupDTO = modelMapper.map(deleteWorkOutGroupRequestDo,WorkOutGroupDTO.class);
+        workOutGroupService.deleteWorkOutGroup(workOutGroupDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping()
+    public ResponseEntity<WorkOutGroupDTO> updateWorkOut(@RequestBody UpdateWorkOutGroupRequestDo updateWorkOutGroupRequestDo) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        WorkOutGroupDTO workOutGroupDTO = modelMapper.map(updateWorkOutGroupRequestDo,WorkOutGroupDTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body( workOutGroupService.updateWorkOutGroup(workOutGroupDTO));
     }
 
 }
